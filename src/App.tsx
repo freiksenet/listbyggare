@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import theme from "./theme";
 import About from "./About";
 import Header from "./Header";
+import Lists from "./Lists";
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
       <Router>
         <Header />
         <Switch>
-          <Route path="/lists">Lists</Route>
+          <Route path="/lists">
+            <Lists />
+          </Route>
           <Route path="/lists/:id">List</Route>
           <Route path="/">
             <About />

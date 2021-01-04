@@ -58,10 +58,14 @@ function Header() {
         flexGrow={1}
       >
         <MenuItem>
-          <Link to="/lists">Lists</Link>
+          <Link as={RRLink} to="/lists">
+            Lists
+          </Link>
         </MenuItem>
         <MenuItem>
-          <Link to="/">About</Link>
+          <Link as={RRLink} to="/">
+            About
+          </Link>
         </MenuItem>
       </Stack>
 
