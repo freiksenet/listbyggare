@@ -1,11 +1,9 @@
 import React from "react";
+import { pickBy } from "lodash";
 
 import {
   Stack,
   Heading,
-  HStack,
-  Button,
-  Box,
   Wrap,
   WrapItem,
   Accordion,
@@ -14,34 +12,39 @@ import {
   AccordionItem,
   AccordionPanel,
 } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { useHistory } from "react-router-dom";
 
-import ShipCard from "./ShipCard";
+import StorageContext from "../../storage/StorageContext";
+import { List } from "../../fleets/List";
+import { deleteList, updateList } from "../../storage/actions";
+import ShipCard from "../ShipCard";
+import ListHeader from "./ListHeader";
 
-function ListView() {
+function ListView({ list }: { list: List }) {
+  let storageContext = React.useContext(StorageContext);
+  let history = useHistory();
+
   return (
     <Stack flexGrow={1} spacing={0} direction="column">
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        alignItems="center"
-        borderBottom="1px"
-        borderColor="gray.100"
-        bg="gray.50"
-        p={5}
-      >
-        <Heading as="h4" size="md" flexGrow={1}>
-          My Magical List
-        </Heading>
-        <HStack>
-          <Button leftIcon={<EditIcon />} variant="solid" colorScheme="blue">
-            Edit
-          </Button>
-
-          <Button leftIcon={<DeleteIcon />} variant="solid" colorScheme="red">
-            Delete
-          </Button>
-        </HStack>
-      </Stack>
+      <ListHeader
+        list={list}
+        onDelete={() => {
+          deleteList(storageContext, { id: list.id });
+          history.push("/lists");
+        }}
+        onSave={(listChanges) => {
+          let payload = {
+            ...pickBy(listChanges, (value) => value != null),
+            id: list.id,
+          } as {
+            id: string;
+            name?: string;
+            fleetId?: string;
+            pointLimit?: number;
+          };
+          updateList(storageContext, payload);
+        }}
+      />
       <Accordion allowMultiple allowToggle defaultIndex={[0, 1, 2, 3]}>
         <AccordionItem>
           <AccordionButton>

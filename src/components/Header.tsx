@@ -15,8 +15,8 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import { Link as RRLink } from "react-router-dom";
 
 function Header() {
-  const [show, setShow] = React.useState(false);
-  const handleToggle = () => setShow(!show);
+  let [show, setShow] = React.useState(false);
+  let handleToggle = () => setShow(!show);
 
   return (
     <Flex

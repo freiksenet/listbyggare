@@ -2,12 +2,14 @@ import React from "react";
 
 import { Box, Heading, Badge, VStack, Text, HStack } from "@chakra-ui/react";
 
+import { List } from "../../fleets/List";
+
 function ListCard({
+  list,
   isActive = false,
-  onClick,
 }: {
+  list: List;
   isActive?: boolean;
-  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }) {
   return (
     <Box
@@ -17,18 +19,18 @@ function ListCard({
       overflow="hidden"
       p={3}
       bg={isActive ? "white" : "none"}
-      onClick={onClick}
       cursor="pointer"
     >
       <VStack spacing={1} alignItems="flex-start">
         <Heading as="h4" size="sm">
-          My magical list
+          {list.name || "(Untitled)"}
         </Heading>
-        <Text>Space Marines Domination</Text>
+        <Text>{list.fleet ? list.fleet.name : "(No fleet)"}</Text>
         <HStack spacing={1}>
-          <Badge>1500pt</Badge>
+          <Badge>
+            {list.pointLimit ? `${list.pointLimit}pts` : "No limit"}
+          </Badge>
           <Badge colorScheme="green">Valid</Badge>
-          <Badge colorScheme="red">Invalid</Badge>
         </HStack>
       </VStack>
     </Box>

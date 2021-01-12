@@ -1,10 +1,4 @@
-# Battlefleet Bauhaus
-
-Battlefleet Bauhaus is a fleet builder for Battlefleet Gothic: XR.
-
-## License
-
-Code is licensed with [Parity Public License](https://github.com/freiksenet/listbyggare/blob/master/LICENSE.md). Battlefleet Gothic is created by Games Worshop (see Copyright disclaimer below). Battlefleet Gothic: XR is created by Xca|iber (see [forum thread](https://www.specialist-arms.com/forum/index.php?topic=7869.0)).
+Battlefleet Gothic is created by Games Worshop (see Copyright disclaimer below). Battlefleet Gothic: XR is created by Xca|iber (see [forum thread](https://www.specialist-arms.com/forum/index.php?topic=7869.0)). Data files in this directory are based on intellectual property not covered by Parity License.
 
 ## Copyright Disclaimer
 
