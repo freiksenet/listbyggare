@@ -67,15 +67,11 @@ function ListHeader({
           <Box height="2rem">{list.fleet?.name || "(No fleet selected)"}</Box>
         </FormControl>
         <Spacer />
-        <VStack
-          flexBasis={150}
-          flexGrow={0}
-          flexShrink={0}
-          alignItems="stretch"
-        >
+        <ListHeaderButtons>
           <Button
             leftIcon={<EditIcon />}
             variant="solid"
+            colorScheme="blue"
             onClick={() => {
               setEditing(true);
             }}
@@ -92,14 +88,14 @@ function ListHeader({
           >
             Delete
           </Button>
-        </VStack>
+        </ListHeaderButtons>
       </>
     );
   }
   return (
     <Stack
-      direction={{ base: "column", md: "row" }}
-      alignItems="center"
+      direction={{ base: "column", xl: "row" }}
+      alignItems={{ base: "flex-start", xl: "center" }}
       borderBottom="1px"
       borderColor="gray.100"
       bg="gray.50"
@@ -185,7 +181,7 @@ function ListHeaderForm({
         </Select>
       </FormControl>
       <Spacer />
-      <VStack flexBasis={150} flexGrow={0} flexShrink={0} alignItems="stretch">
+      <ListHeaderButtons>
         <Button
           leftIcon={<CheckIcon />}
           variant="solid"
@@ -206,7 +202,21 @@ function ListHeaderForm({
         >
           Cancel
         </Button>
-      </VStack>
+      </ListHeaderButtons>
     </>
+  );
+}
+
+function ListHeaderButtons({ children }: { children: React.ReactNode }) {
+  return (
+    <Stack
+      direction={{ base: "row", xl: "column" }}
+      flexBasis={{ base: "auto", xl: 150 }}
+      flexGrow={0}
+      flexShrink={0}
+      alignItems="stretch"
+    >
+      {children}
+    </Stack>
   );
 }
