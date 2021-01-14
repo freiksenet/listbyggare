@@ -2,7 +2,7 @@
 
 Contributor: Mikhail Novikov
 
-Source Code: https://github.com/freiksenet/listbyggare
+Source Code: https://github.com/freiksenet/battlefleet-bauhaus
 
 ## Purpose
 

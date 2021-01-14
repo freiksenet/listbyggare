@@ -26,7 +26,7 @@ function About() {
           </Button>
           <Button
             as="a"
-            href="https://github.com/freiksenet/listbyggare"
+            href="https://github.com/freiksenet/battlefleet-bauhaus"
             target="blank"
           >
             Github

@@ -16,8 +16,8 @@ export interface IStorage extends EventEmitter {
   delete(id: string): void;
 }
 
-const LOCAL_STORAGE_LIST_KEY = "listbyggare_lists";
-const LOCAL_STORAGE_ITEM_KEY = "listbyggare_list";
+const LOCAL_STORAGE_LIST_KEY = "battlefleetbauhaus_lists";
+const LOCAL_STORAGE_ITEM_KEY = "battlefleetbauhaus_lists";
 
 export class LocalStorage extends EventEmitter implements IStorage {
   dataSetRepository: DataSetRepository;
