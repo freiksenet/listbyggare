@@ -1,8 +1,14 @@
 import uuid from "short-uuid";
 
 import { IStorage } from "./Storage";
-import { List } from "../fleets/List";
 import { DataSetRepository } from "../data";
+import {
+  FleetCommanderSelection,
+  List,
+  Selection,
+  ShipSelection,
+} from "../fleets/List";
+import { IFleetCommander, IShip } from "../fleets/Data";
 
 export interface IActionContext {
   storage: IStorage;
@@ -60,5 +66,57 @@ export function updateList(
     }
     storage.set(id, list);
     return list;
+  }
+}
+
+export function addSelectionToList(
+  { storage }: IActionContext,
+  {
+    id,
+    selectable,
+  }: {
+    id: string;
+    selectable: IShip | IFleetCommander;
+  },
+): Selection | null {
+  let selectionId = uuid.generate();
+  let selection: Selection | null;
+  if (selectable.type === "FLEET COMMANDER") {
+    selection = new FleetCommanderSelection({
+      id: selectionId,
+      commander: selectable,
+      options: {},
+    });
+  } else {
+    selection = new ShipSelection({
+      id: selectionId,
+      ship: selectable,
+      options: {},
+    });
+  }
+  let list = storage.getById(id);
+  if (!list) {
+    return null;
+  } else {
+    list.addSelection(selection);
+    storage.set(id, list);
+  }
+  return selection;
+}
+
+export function deleteSelectionFromList(
+  { storage }: IActionContext,
+  {
+    id,
+    selectionId,
+  }: {
+    id: string;
+    selectionId: string;
+  },
+): void {
+  let list = storage.getById(id);
+  if (list) {
+    list.removeSelection(selectionId);
+    storage.set(id, list);
   }
 }

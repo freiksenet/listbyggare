@@ -160,6 +160,7 @@ export class List {
 
 export interface ISelection {
   id: string;
+  getName(): string;
   getPoints(): number;
   getTags(): Array<string>;
   serialize(): SerializedSelection;
@@ -197,6 +198,10 @@ export class FleetCommanderSelection implements ISelection {
     this.id = id;
     this.commander = commander;
     this.options = options;
+  }
+
+  getName(): string {
+    return this.commander.name;
   }
 
   getPoints(): number {
@@ -263,6 +268,10 @@ export class ShipSelection implements ISelection {
     this.options = options;
   }
 
+  getName(): string {
+    return this.ship.name;
+  }
+
   getPoints(): number {
     return getPointsForSingleSelection(this.ship, this.options);
   }
@@ -308,6 +317,10 @@ export class SquadronSelection implements ISelection {
   constructor({ id, ships }: { id: string; ships: Array<ShipSelection> }) {
     this.id = id;
     this.ships = ships;
+  }
+
+  getName(): string {
+    return "Squadron";
   }
 
   getPoints() {

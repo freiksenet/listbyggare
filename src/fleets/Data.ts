@@ -2,11 +2,7 @@ import { intersection } from "lodash";
 
 import { List } from "./List";
 
-export type Selectable =
-  | IShip
-  | IFleet
-  | IFleetCommander
-  | (ISpecialRule & { id: string });
+export type Selectable = IShip | IFleet | IFleetCommander;
 
 export class DataSet {
   name: string;
@@ -31,6 +27,10 @@ export class DataSet {
     }
   }
 
+  getAllSelectables() {
+    return Array.from(this.contentMap.values());
+  }
+
   getSelectableById(id: string): Selectable | null {
     return this.contentMap.get(id) || null;
   }
@@ -45,7 +45,17 @@ export class DataSet {
     return result;
   }
 
-  getSelectablesByTags(tags: string): Array<Selectable> {
+  getSelectableByTypes(types: Array<string>): Array<Selectable> {
+    let result: Array<Selectable> = [];
+    for (let selectable of this.contentMap.values()) {
+      if (types.includes(selectable.type)) {
+        result.push(selectable);
+      }
+    }
+    return result;
+  }
+
+  getSelectablesByTags(tags: Array<string>): Array<Selectable> {
     let result = [];
     for (let selectable of this.contentMap.values()) {
       let selectionTags = selectable.tags;
@@ -123,10 +133,8 @@ export interface IShip {
 }
 
 export type Loadout =
-  | string
-  | IShipArnamentLoadout
-  | ISpecialRule
-  | ILoadoutOption;
+  // | string
+  IShipArnamentLoadout | ISpecialRule | ILoadoutOption;
 
 export interface IShipProfile {
   hits: number;

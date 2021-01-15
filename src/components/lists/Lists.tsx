@@ -31,7 +31,7 @@ function Lists({ lists }: { lists: Array<List> }) {
     >
       <Box
         pt={5}
-        flexBasis={{ base: "none", md: "md" }}
+        flexBasis={{ base: "none", xl: "md" }}
         maxWidth={{ base: "none", md: "md" }}
         flexShrink={0}
         bg="gray.200"

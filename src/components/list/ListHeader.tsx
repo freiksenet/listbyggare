@@ -17,10 +17,13 @@ import {
   Select,
   Text,
   FormErrorMessage,
+  StackProps,
+  FormControlProps,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 
 import { List } from "../../fleets/List";
+import ListDeleteButton from "./ListDeleteButton";
 
 interface IListUpdates {
   name: string | null;
@@ -32,11 +35,12 @@ function ListHeader({
   list,
   onSave,
   onDelete,
+  ...props
 }: {
   list: List;
   onDelete: () => void;
   onSave: (listUpdates: IListUpdates) => void;
-}) {
+} & StackProps) {
   let [editing, setEditing] = React.useState(false);
 
   let content;
@@ -54,19 +58,23 @@ function ListHeader({
   } else {
     content = (
       <>
-        <FormControl id="name">
-          <FormLabel>Name</FormLabel>
-          <Box height="2rem">{list.name || "(Untitled)"}</Box>
-        </FormControl>
-        <FormControl id="points">
-          <FormLabel>Point Limit</FormLabel>
-          <Box height="2rem">{list.pointLimit || "(No point limit)"}</Box>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Fleet</FormLabel>
-          <Box height="2rem">{list.fleet?.name || "(No fleet selected)"}</Box>
-        </FormControl>
-        <Spacer />
+        <ListHeaderFormControl
+          id="name"
+          label="Name"
+          text={list.name || "(Untitled)"}
+        />
+        <ListHeaderFormControl
+          id="points"
+          label="Points"
+          text={`${list.getPoints()} / ${
+            list.pointLimit || "(No point limit)"
+          }`}
+        />
+        <ListHeaderFormControl
+          id="fleetId"
+          label="Fleet"
+          text={list.fleet?.name || "(No fleet selected)"}
+        />
         <ListHeaderButtons>
           <Button
             leftIcon={<EditIcon />}
@@ -78,16 +86,16 @@ function ListHeader({
           >
             Edit
           </Button>
-          <Button
+          <ListDeleteButton
             leftIcon={<DeleteIcon />}
             variant="solid"
             colorScheme="red"
-            onClick={() => {
+            onDelete={() => {
               onDelete();
             }}
           >
             Delete
-          </Button>
+          </ListDeleteButton>
         </ListHeaderButtons>
       </>
     );
@@ -96,10 +104,10 @@ function ListHeader({
     <Stack
       direction={{ base: "column", xl: "row" }}
       alignItems={{ base: "flex-start", xl: "center" }}
-      borderBottom="1px"
-      borderColor="gray.100"
-      bg="gray.50"
-      p={5}
+      px={5}
+      pb={{ base: 5, xl: 1 }}
+      pt={{ base: 5, xl: 2 }}
+      {...props}
     >
       {content}
     </Stack>
@@ -126,61 +134,73 @@ function ListHeaderForm({
     formState.pointLimit == null || !Number.isNaN(formState.pointLimit);
   return (
     <>
-      <FormControl id="name">
-        <FormLabel>Name</FormLabel>
-        <Input
-          size="sm"
-          type="text"
-          value={formState.name || ""}
-          onChange={(e) => {
-            setFormState({
-              ...formState,
-              name: e.target.value,
-            });
-          }}
-        />
-      </FormControl>
-      <FormControl id="points">
-        <FormLabel>Point Limit</FormLabel>
-        <NumberInput
-          value={formState.pointLimit || 0}
-          size="sm"
-          step={100}
-          min={0}
-          onChange={(valueAsString: string, valueAsNumber: number) => {
-            setFormState({
-              ...formState,
-              pointLimit: valueAsNumber,
-            });
-          }}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-        {!validNumber && <FormErrorMessage>Must be a number</FormErrorMessage>}
-      </FormControl>
-      <FormControl>
-        <FormLabel>Fleet</FormLabel>
-        <Select
-          size="sm"
-          value={formState.fleetId || undefined}
-          onChange={(e) => {
-            setFormState({
-              ...formState,
-              fleetId: e.currentTarget.value,
-            });
-          }}
-        >
-          {!list.fleet && <option>(Not selected)</option>}
-          {(list.dataSet?.getSelectableByType("FLEET") || []).map((fleet) => (
-            <option value={fleet.id}>{fleet.name}</option>
-          ))}
-        </Select>
-      </FormControl>
-      <Spacer />
+      <ListHeaderFormControl
+        id="name"
+        label="Name"
+        control={
+          <Input
+            size="sm"
+            type="text"
+            value={formState.name || ""}
+            onChange={(e) => {
+              setFormState({
+                ...formState,
+                name: e.target.value,
+              });
+            }}
+          />
+        }
+      />
+      <ListHeaderFormControl
+        id="points"
+        label="Point Limit"
+        control={
+          <>
+            <NumberInput
+              value={formState.pointLimit || 0}
+              size="sm"
+              step={100}
+              min={0}
+              onChange={(valueAsString: string, valueAsNumber: number) => {
+                setFormState({
+                  ...formState,
+                  pointLimit: valueAsNumber,
+                });
+              }}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            {!validNumber && (
+              <FormErrorMessage>Must be a number</FormErrorMessage>
+            )}
+          </>
+        }
+      />
+      <ListHeaderFormControl
+        id="fleetId"
+        label="Fleet"
+        control={
+          <Select
+            size="sm"
+            value={formState.fleetId || undefined}
+            onChange={(e) => {
+              setFormState({
+                ...formState,
+                fleetId: e.currentTarget.value,
+              });
+            }}
+          >
+            {!list.fleet && <option>(Not selected)</option>}
+            {(list.dataSet?.getSelectableByType("FLEET") || []).map((fleet) => (
+              <option value={fleet.id}>{fleet.name}</option>
+            ))}
+          </Select>
+        }
+      />
       <ListHeaderButtons>
         <Button
           leftIcon={<CheckIcon />}
@@ -210,13 +230,45 @@ function ListHeaderForm({
 function ListHeaderButtons({ children }: { children: React.ReactNode }) {
   return (
     <Stack
-      direction={{ base: "row", xl: "column" }}
-      flexBasis={{ base: "auto", xl: 150 }}
+      direction={{ base: "row" }}
+      flexWrap="wrap"
+      flexBasis={{ base: "auto", xl: 230 }}
       flexGrow={0}
-      flexShrink={0}
+      flexShrink={1}
       alignItems="stretch"
+      spacing={1}
+      justifyContent="flex-end"
     >
       {children}
     </Stack>
+  );
+}
+
+function ListHeaderFormControl({
+  label,
+  control,
+  text,
+  ...props
+}: { control?: React.ReactNode; text?: string } & FormControlProps) {
+  let contents;
+  if (control) {
+    contents = control;
+  } else if (text) {
+    contents = (
+      <Box
+        whiteSpace="nowrap"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        height="2rem"
+      >
+        {text}
+      </Box>
+    );
+  }
+  return (
+    <FormControl flexBasis={0} flexGrow={1} flexShrink={1} {...props}>
+      <FormLabel mr={0}>{label}</FormLabel>
+      {contents}
+    </FormControl>
   );
 }

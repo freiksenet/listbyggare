@@ -1,6 +1,20 @@
-import { IShip, FIRE_ARC, IFleet, IFleetCommander } from "../../fleets/Data";
+import {
+  IShip,
+  FIRE_ARC,
+  IFleet,
+  IFleetCommander,
+  ISpecialRule,
+} from "../../fleets/Data";
 
 const THUNDERHAWKS = { name: "THUNDERHAWKS", speed: 20 };
+
+const PONDEROUS: ISpecialRule = {
+  tags: ["PONDEROUS"],
+  name: "Ponderous",
+  type: "SPECIAL RULE",
+  text:
+    "This ship is ponderous and cannot use Come to New Heading special orders.",
+};
 
 const ULTIMA_CLASS_BATTLE_BARGE: IShip = {
   type: "SHIP",
@@ -23,7 +37,7 @@ const ULTIMA_CLASS_BATTLE_BARGE: IShip = {
     turrets: 4,
   },
   loadout: [
-    "PONDEROUS",
+    PONDEROUS,
     {
       type: "ARMAMENT",
       name: "Port Bombardment Cannon",
@@ -148,7 +162,7 @@ const SPACE_MARINE_BATTLE_BARGE: IShip = {
     turrets: 4,
   },
   loadout: [
-    "PONDEROUS",
+    PONDEROUS,
     {
       type: "ARMAMENT",
       name: "Port Weapons Battery",
